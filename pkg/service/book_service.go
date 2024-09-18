@@ -24,9 +24,9 @@ func (s *BookService) CrearLibro(titulo, autor string, año int64) error {
 }
 
 func (s *BookService) GetLibros() []model.Book {
-	var libros = make([]model.Book, 0)
-	for _, libro := range s.repositorio.Libros {
-		libros = append(libros, *libro)
-	}
-	return libros
+	return s.repositorio.Libros
+}
+
+func (s *BookService) GetBy(titulo string) (model.Book, error) {
+	return s.repositorio.GetBy(titulo)
 }

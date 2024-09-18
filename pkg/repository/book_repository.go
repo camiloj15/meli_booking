@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"sync"
 	"time"
 
@@ -8,13 +9,13 @@ import (
 )
 
 type BookRepository struct {
-	Libros map[string]*model.Book
+	Libros []model.Book
 	mu     sync.RWMutex
 }
 
 func NewBookRepository() *BookRepository {
 	return &BookRepository{
-		Libros: make(map[string]*model.Book),
+		Libros: []model.Book{},
 	}
 }
 
@@ -27,6 +28,15 @@ func (r *BookRepository) CrearLibro(titulo, autor string, año int64) error {
 		Año:      año,
 		CreadoEn: time.Now(),
 	}
-	r.Libros[titulo] = libro
+	r.Libros = append(r.Libros, *libro)
 	return nil
+}
+
+func (r *BookRepository) GetBy(titulo string) (book model.Book, err error) {
+	for _, book := range r.Libros {
+		if(book.Titulo == titulo){
+			return book, nil
+		}
+	}
+	return model.Book{}, errors.New("Not Found")
 }

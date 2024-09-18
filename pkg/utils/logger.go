@@ -2,6 +2,7 @@ package utils
 
 import (
 	"log"
+	"os"
 )
 
 func NewLogger() *log.Logger {
