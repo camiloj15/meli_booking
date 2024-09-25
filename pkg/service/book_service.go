@@ -1,32 +1,36 @@
 package service
 
 import (
-	"profiling/pkg/repository"
 	"profiling/pkg/model"
+	"profiling/pkg/repository"
 )
 
 type BookService struct {
-	repositorio *repository.BookRepository
+	bookRepository *repository.BookRepository
 }
 
 func NewBookService() *BookService {
 	return &BookService{
-		repositorio: repository.NewBookRepository(),
+		bookRepository: repository.NewBookRepository(),
 	}
 }
 
-func (s *BookService) CrearLibro(titulo, autor string, año int64) error {
-	err := s.repositorio.CrearLibro(titulo, autor, año)
+func (s *BookService) CreateBook(title, author string, year int64, rank float64) error {
+	err := s.bookRepository.Create(title, author, year, rank)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *BookService) GetLibros() []model.Book {
-	return s.repositorio.Libros
+func (s *BookService) GetBooks() []model.Book {
+	return s.bookRepository.Books
 }
 
-func (s *BookService) GetBy(titulo string) (model.Book, error) {
-	return s.repositorio.GetBy(titulo)
+func (s *BookService) GetBy(title string) (model.Book, error) {
+	return s.bookRepository.GetBy(title)
+}
+
+func (s *BookService) GetTopTenRanked() ([]model.Book, error) {
+	return s.bookRepository.GetTopTenRanked()
 }
