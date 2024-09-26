@@ -49,12 +49,19 @@ func (r *BookRepository) GetTopTenRanked() (books []model.Book, err error) {
 			topTenBooks = append(topTenBooks, book)
 		}
 		for i := 10; i < numberOfBooks; i++ {
-			book := copyRepository[i]
 			for j := 0; j < 10; j++ {
-				if book.Ranking > topTenBooks[j].Ranking {
-					topTenBooks[j] = book
-					j = 10
+				if copyRepository[i].Ranking > topTenBooks[j].Ranking {
+					oldBook := topTenBooks[j]
+					topTenBooks[j] = copyRepository[i]
+					copyRepository[i] = oldBook
 				}
+			}
+		}
+		for i := 0; i < 9; i++ {
+			if topTenBooks[i].Ranking > topTenBooks[i+1].Ranking {
+				oldBook := topTenBooks[i+1]
+				topTenBooks[i+1] = topTenBooks[i]
+				topTenBooks[i] = oldBook
 			}
 		}
 		return topTenBooks, nil

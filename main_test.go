@@ -26,13 +26,22 @@ func TestCrearLibros(t *testing.T) {
 			return
 		}
 	}
+}
 
-	topTenBooks, errTopTen := bookService.GetTopTenRanked()
-	if errTopTen == nil {
-		t.Log("This is the top ten")
-		for _, book := range topTenBooks {
-			t.Log(book)
+func TestGetTopTen(t *testing.T) {
+	bookService := service.NewBookService()
+	length := 100000
+	for i := 0; i < length; i++ {
+		err := bookService.CreateBook(fmt.Sprintf("Título %d", i), fmt.Sprintf("Author %d", i), int64(i), randFloats(1, 5))
+		if err != nil {
+			t.Errorf("Error creando libro: %v", err)
+			return
 		}
+	}
+
+	_, errTopTen := bookService.GetTopTenRanked()
+	if errTopTen != nil {
+		t.Log("No se ejecuta")
 	}
 }
 
